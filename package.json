@@ -6,6 +6,15 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{ts}": "eslint --cache --fix",
+    "*.{ts,js,json}": "prettier --write"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/50ra4/clasp-ts-template.git"
