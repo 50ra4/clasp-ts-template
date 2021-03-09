@@ -1,0 +1,19 @@
+{
+  "name": "clasp-ts-template",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/50ra4/clasp-ts-template.git"
+  },
+  "author": "sigarashi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/50ra4/clasp-ts-template/issues"
+  },
+  "homepage": "https://github.com/50ra4/clasp-ts-template#readme"
+}
