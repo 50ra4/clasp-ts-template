@@ -36,7 +36,8 @@
       }
     ],
     // "complexity": ["error", 4],
-    "@typescript-eslint/explicit-function-return-type": "off",
+    // "@typescript-eslint/explicit-function-return-type": "off",
+    // "@typescript-eslint/explicit-module-boundary-types": "off",
     "no-var": "error",
     "no-console": "warn"
   }
