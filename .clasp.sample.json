@@ -1,0 +1,5 @@
+{
+  "scriptId": "Please input scriptId and rename this file name to '.clasp.json'",
+  "rootDir": "dist/",
+  "fileExtension": "js"
+}

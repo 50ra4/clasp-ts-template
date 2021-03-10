@@ -102,3 +102,9 @@ dist
 
 # TernJS port file
 .tern-port
+
+# Clasp
+.clasp.json
+
+# scripts test
+.output
