@@ -9,7 +9,8 @@
     "publish": "npm run build && clasp push",
     "test": "jest -c ./jest.config.js",
     "check-type": "tsc --noEmit",
-    "generate-env": "ts-node --project tsconfig.scripts.json scripts/generateEnv.ts"
+    "generate-env": "ts-node --project tsconfig.scripts.json scripts/generateEnv.ts",
+    "setup-clasp-files": "ts-node --project tsconfig.scripts.json scripts/setupClaspFiles.ts"
   },
   "husky": {
     "hooks": {

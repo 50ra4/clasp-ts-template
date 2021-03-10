@@ -11,6 +11,9 @@ export const DEFAULT_CLAPS_SETTING_FILE_PATH = path.join(process.cwd(), CLAPS_SE
 export const ENVIRONMENT_FILE_NAME = '.env';
 export const DEFAULT_ENVIRONMENT_FILE_PATH = path.join(process.cwd(), ENVIRONMENT_FILE_NAME);
 
+export const OUTPUT_DIRECTORY_NAME = '.output';
+export const OUTPUT_DIRECTORY_PATH = path.join(process.cwd(), OUTPUT_DIRECTORY_NAME);
+
 export const SCRIPT_OPTION = {
   cd: 'CD',
   deploymentName: 'deploymentName',

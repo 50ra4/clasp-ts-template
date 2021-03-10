@@ -28,11 +28,32 @@ export const createEnvironmentFile = <T extends ObjectType = EmptyObject>(path: 
     (e) => toError(e),
   );
 
+export const createDirectory = (path: string): void => {
+  if (!fs.existsSync(path)) {
+    fs.mkdirSync(path);
+  }
+};
+
 export const throwError = <E = unknown>(error: E): never => {
   throw error;
 };
 
 export const exitProcessError = <E = unknown>(error: E): never => {
+  // eslint-disable-next-line no-console
   console.error(error);
   process.exit(1);
+};
+
+export const ifElse = <A extends ReadonlyArray<unknown>, B, C>(
+  fn: (...a: A) => boolean,
+  onTrue: (...a: A) => B,
+  onFalse: (...a: A) => C,
+): ((...a: A) => B | C) => {
+  return (...args: A) => {
+    if (fn(...args)) {
+      return onTrue(...args);
+    } else {
+      return onFalse(...args);
+    }
+  };
 };
