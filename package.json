@@ -8,7 +8,8 @@
     "build": "npm run clear && webpack --mode production --config webpack.config.js && cp ./appsscript.json ./dist",
     "publish": "npm run build && clasp push",
     "test": "jest -c ./jest.config.js",
-    "check-type": "tsc --noEmit"
+    "check-type": "tsc --noEmit",
+    "generate-env": "ts-node --project tsconfig.scripts.json scripts/generateEnv.ts"
   },
   "husky": {
     "hooks": {
