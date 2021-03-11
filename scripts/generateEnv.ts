@@ -1,6 +1,6 @@
 import { execSync } from 'child_process';
 import { Command } from 'commander';
-import { isNone } from 'fp-ts/lib/Option';
+import { fold } from 'fp-ts/lib/Option';
 import { findFirst } from 'fp-ts/lib/Array';
 import { flow, pipe } from 'fp-ts/lib/function';
 import { Either, isLeft, toError, tryCatch, getOrElse } from 'fp-ts/lib/Either';
@@ -39,12 +39,10 @@ const findByDeploymentName = (deploymentName: string): Either<Error, string> =>
     flow(
       () => execSync('npx clasp deployments').toString().split('\n'),
       findFirst((deployment: string) => deployment.includes(deploymentName)),
-      (deployment) => {
-        if (isNone(deployment)) {
-          throw Error(`"${deploymentName}" is not found clasp deployments`);
-        }
-        return deployment.value.split(' ')[1];
-      },
+      fold(
+        () => throwError(new Error(`"${deploymentName}" is not found clasp deployments`)),
+        (deployment: string) => deployment.split(' ')[1],
+      ),
     ),
     (e) => toError(e),
   );
