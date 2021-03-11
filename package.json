@@ -10,7 +10,8 @@
     "test": "jest -c ./jest.config.js",
     "check-type": "tsc --noEmit",
     "generate-env": "ts-node --project tsconfig.scripts.json scripts/generateEnv.ts",
-    "setup-clasp-files": "ts-node --project tsconfig.scripts.json scripts/setupClaspFiles.ts"
+    "setup-clasp-files": "ts-node --project tsconfig.scripts.json scripts/setupClaspFiles.ts",
+    "update-version": "ts-node --project tsconfig.scripts.json scripts/updateVersion.ts"
   },
   "husky": {
     "hooks": {
