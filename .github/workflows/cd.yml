@@ -1,0 +1,103 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CD
+
+# Controls when the action will run.
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  push:
+    tags:
+      - "v*"
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "deploy"
+  deploy:
+    name: deploy
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    env:
+      REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
+      SCRIPT_ID: ${{ secrets.SCRIPT_ID }}
+      DEPLOYMENT_ID: ${{ secrets.DEPLOYMENT_ID }}
+
+    # node version
+    strategy:
+      matrix:
+        node-version: ["14.16"]
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      # Setup node
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      # Install npm packages
+      - name: Install npm packages
+        run: |
+          npm install
+
+      # Generate files for deploy clasp
+      - name: Generate "~/.clasprc.json" & "~/.clasp.json"
+        run: |
+          npm run setup-clasp-files -- --CD
+
+      # Deploy clasp
+      - name: Deploy
+        run: |
+          npm run build
+          npx clasp push -f
+          VERSION=${GITHUB_REF#refs/tags/}
+          npx clasp version "Release $VERSION"
+          NEW_VERSION_ID=$(npx clasp versions | sed -n 2p | awk '{ print $1 }')
+          npx clasp deploy -i $DEPLOYMENT_ID -V $NEW_VERSION_ID -d "Production"
+
+  # This workflow contains a single job called "release"
+  release:
+    needs: [deploy]
+    name: release
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      # Get version
+      - name: Get the version
+        id: get_version
+        run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
+
+      # Get commit summary
+      - name: Get commit summary
+        id: get_commit_summary
+        run: |
+          PREVIOUS_TAG=$(git tag --sort=-creatordate | sed -n 2p)
+          echo "PREVIOUS_TAG: $PREVIOUS_TAG"
+          COMMIT_SUMMARY="$(git log --oneline --pretty=tformat:"%h %s" $PREVIOUS_TAG..${{ github.ref }})"
+          COMMIT_SUMMARY="${COMMIT_SUMMARY//$'\n'/'%0A'}"
+          echo ::set-output name=COMMIT_SUMMARY::$COMMIT_SUMMARY
+
+      # Create release
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.get_version.outputs.VERSION }}
+          release_name: Release ${{ steps.get_version.outputs.VERSION }}
+          body: |
+            ${{ steps.get_commit_summary.outputs.COMMIT_SUMMARY }}
+          draft: false
+          prerelease: false
