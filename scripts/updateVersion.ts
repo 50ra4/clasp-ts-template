@@ -57,7 +57,7 @@ const pushReleaseBranch = flow(
   },
   (branchName) => {
     execSync(`git checkout -b ${branchName}`);
-    execSync(`git push -u ${branchName}`);
+    execSync(`git push -u origin ${branchName}`);
     return branchName;
   },
   (branchName) => {
