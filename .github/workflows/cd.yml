@@ -5,17 +5,19 @@ name: CD
 # Controls when the action will run.
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
-  push:
-    tags:
-      - "v*"
+  pull_request:
+    branches:
+      - main
+    types: [closed]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "deploy"
   deploy:
-    name: deploy
+    name: Deploy GoogleAppScripts
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true && startsWith(github.event.pull_request.head.ref, 'release/v')
 
     env:
       REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
@@ -30,7 +32,8 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
+      - name: Checkout Repository
+        uses: actions/checkout@v2
 
       # Setup node
       - name: Use Node.js ${{ matrix.node-version }}
@@ -64,6 +67,7 @@ jobs:
     name: release
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true && startsWith(github.event.pull_request.head.ref, 'release/v')
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -73,10 +77,22 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Add Version Tag
+        env:
+          HEAD_REF: ${{ github.event.pull_request.head.ref }}
+        run: |
+          TAG_NAME=$(echo "$HEAD_REF" | awk -F "/" '{ print $2 }')
+          echo "TAG_NAME: $TAG_NAME"
+          git tag ${TAG_NAME}
+          PUSH_URL="https://${GITHUB_ACTOR}:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}"
+          git push -u origin ${TAG_NAME}
+
       # Get version
       - name: Get the version
         id: get_version
-        run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
+        run: |
+          VERSION_TAG=$(git tag --sort=-creatordate | sed -n 1p)
+          echo ::set-output name=VERSION::${VERSION_TAG}
 
       # Get commit summary
       - name: Get commit summary
@@ -84,7 +100,7 @@ jobs:
         run: |
           PREVIOUS_TAG=$(git tag --sort=-creatordate | sed -n 2p)
           echo "PREVIOUS_TAG: $PREVIOUS_TAG"
-          COMMIT_SUMMARY="$(git log --oneline --pretty=tformat:"%h %s" $PREVIOUS_TAG..${{ github.ref }})"
+          COMMIT_SUMMARY="$(git log --oneline --pretty=tformat:"%h %s" $PREVIOUS_TAG..${{ steps.get_version.outputs.VERSION }})"
           COMMIT_SUMMARY="${COMMIT_SUMMARY//$'\n'/'%0A'}"
           echo ::set-output name=COMMIT_SUMMARY::$COMMIT_SUMMARY
 
