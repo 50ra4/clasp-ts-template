@@ -53,10 +53,12 @@ jobs:
 
       # Deploy clasp
       - name: Deploy
+        env:
+          HEAD_REF: ${{ github.event.pull_request.head.ref }}
         run: |
           npm run build
           npx clasp push -f
-          VERSION=${GITHUB_REF#refs/tags/}
+          VERSION=$(echo "$HEAD_REF" | awk -F "/" '{ print $2 }')
           npx clasp version "Release $VERSION"
           NEW_VERSION_ID=$(npx clasp versions | sed -n 2p | awk '{ print $1 }')
           npx clasp deploy -i $DEPLOYMENT_ID -V $NEW_VERSION_ID -d "Production"
