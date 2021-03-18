@@ -28,21 +28,13 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
-      - name: Add Version Tag
-        env:
-          HEAD_REF: ${{ github.event.pull_request.head.ref }}
-        run: |
-          TAG_NAME=$(echo "$HEAD_REF" | awk -F "/" '{ print $2 }')
-          echo "TAG_NAME: $TAG_NAME"
-          git tag ${TAG_NAME}
-          PUSH_URL="https://${GITHUB_ACTOR}:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}"
-          git push -u origin ${TAG_NAME}
-
       # Get version
       - name: Get the version
         id: get_version
+        env:
+          HEAD_REF: ${{ github.event.pull_request.head.ref }}
         run: |
-          VERSION_TAG=$(git tag --sort=-creatordate | sed -n 1p)
+          VERSION_TAG=$(echo "$HEAD_REF" | awk -F "/" '{ print $2 }')
           echo ::set-output name=VERSION::${VERSION_TAG}
 
       # Get commit summary
