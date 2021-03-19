@@ -63,6 +63,7 @@ jobs:
         id: get_commit_summary
         env:
           VERSION: ${{ needs.preparation.outputs.new_version }}
+          PREVIOUS_TAG: ${{ needs.preparation.outputs.previous_version }}
           LATEST_COMMIT_HASH: ${{ needs.preparation.outputs.latest_commit_hash }}
         run: |
           echo "PREVIOUS_TAG: $PREVIOUS_TAG, LATEST_COMMIT_HASH: $LATEST_COMMIT_HASH"
