@@ -38,7 +38,8 @@ jobs:
           NEW_VERSION=$(echo "$HEAD_REF" | awk -F "/" '{ print $2 }')
           PREVIOUS_VERSION=$(git tag --sort=-creatordate | sed -n 2p)
           LATEST_COMMIT_HASH=$(git rev-parse HEAD)
-          TAG_LIST=$(git tag)
+          TAG_LIST=$(git tag --sort=-creatordate)
+          TAG_LIST="${TAG_LIST//$'\n'/'%0A'}"
           echo "TAG_LIST: $TAG_LIST"
           echo "NEW_VERSION: $NEW_VERSION, PREVIOUS_TAG: $PREVIOUS_TAG, LATEST_COMMIT_HASH: $LATEST_COMMIT_HASH"
           echo ::set-output name=NEW_VERSION::$NEW_VERSION
