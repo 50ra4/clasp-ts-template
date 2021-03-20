@@ -38,6 +38,7 @@ jobs:
           NEW_VERSION=$(echo "$HEAD_REF" | awk -F "/" '{ print $2 }')
           PREVIOUS_VERSION=$(git tag --sort=-creatordate | sed -n 2p)
           LATEST_COMMIT_HASH=$(git rev-parse HEAD)
+          echo "NEW_VERSION: $NEW_VERSION, PREVIOUS_TAG: $PREVIOUS_TAG, LATEST_COMMIT_HASH: $LATEST_COMMIT_HASH"
           echo ::set-output name=NEW_VERSION::$NEW_VERSION
           echo ::set-output name=PREVIOUS_VERSION::$PREVIOUS_VERSION
           echo ::set-output name=LATEST_COMMIT_HASH::$LATEST_COMMIT_HASH
@@ -48,7 +49,7 @@ jobs:
     needs: [preparation]
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
-    if: github.event.pull_request.merged == true && startsWith(github.event.pull_request.head.ref, 'release/v') && needs.preparation.outputs.new_version != needs.preparation.outputs.previous_version
+    if: github.event.pull_request.merged == true && startsWith(github.event.pull_request.head.ref, 'release/v') && ${{ needs.preparation.outputs.new_version }} != ${{ needs.preparation.outputs.previous_version }}
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -66,7 +67,6 @@ jobs:
           PREVIOUS_TAG: ${{ needs.preparation.outputs.previous_version }}
           LATEST_COMMIT_HASH: ${{ needs.preparation.outputs.latest_commit_hash }}
         run: |
-          echo "PREVIOUS_TAG: $PREVIOUS_TAG, LATEST_COMMIT_HASH: $LATEST_COMMIT_HASH"
           COMMIT_SUMMARY="$(git log --oneline --pretty=tformat:"%h %s" $PREVIOUS_TAG..$LATEST_COMMIT_HASH)"
           COMMIT_SUMMARY="${COMMIT_SUMMARY//$'\n'/'%0A'}"
           echo ::set-output name=COMMIT_SUMMARY::$COMMIT_SUMMARY
