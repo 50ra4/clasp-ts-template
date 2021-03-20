@@ -49,13 +49,13 @@ jobs:
     needs: [preparation]
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
-    if: github.event.pull_request.merged == true && startsWith(github.event.pull_request.head.ref, 'release/v')
+    if: github.event.pull_request.merged == true && startsWith(github.event.pull_request.head.ref, 'release/v') && ${{ needs.preparation.outputs.new_version != needs.preparation.outputs.previous_version }}
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Checkout Repository
-        if: ${{ needs.preparation.outputs.new_version != needs.preparation.outputs.previous_version }}
+        # if: ${{ needs.preparation.outputs.new_version != needs.preparation.outputs.previous_version }}
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
