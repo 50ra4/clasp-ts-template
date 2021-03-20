@@ -36,11 +36,8 @@ jobs:
           HEAD_REF: ${{ github.event.pull_request.head.ref }}
         run: |
           NEW_VERSION=$(echo "$HEAD_REF" | awk -F "/" '{ print $2 }')
-          PREVIOUS_VERSION=$(git tag --sort=-creatordate | sed -n 2p)
+          PREVIOUS_VERSION=$(git tag --sort=-creatordate | sed -n 1p)
           LATEST_COMMIT_HASH=$(git rev-parse HEAD)
-          TAG_LIST=$(git tag --sort=-creatordate)
-          TAG_LIST="${TAG_LIST//$'\n'/'%0A'}"
-          echo "TAG_LIST: $TAG_LIST"
           echo "NEW_VERSION: $NEW_VERSION, PREVIOUS_TAG: $PREVIOUS_TAG, LATEST_COMMIT_HASH: $LATEST_COMMIT_HASH"
           echo ::set-output name=NEW_VERSION::$NEW_VERSION
           echo ::set-output name=PREVIOUS_VERSION::$PREVIOUS_VERSION
@@ -58,7 +55,7 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Checkout Repository
-        if: needs.preparation.outputs.new_version != needs.preparation.outputs.previous_version
+        if: ${{ needs.preparation.outputs.new_version != needs.preparation.outputs.previous_version }}
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
