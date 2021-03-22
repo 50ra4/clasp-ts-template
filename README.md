@@ -3,13 +3,13 @@ clasp-ts-template
 
 ## Description
 
-This is `GoogleAppsScripts(GAS)` template repository used `Clasp` & `TypeScript`.
+This is `GoogleAppsScript(GAS)` template repository used `Clasp` & `TypeScript`.
 
 ## Requirement
 
 - Install node.js(14.16.0)
 
-- Create new `GoogleAppsScripts` project and get the project's scriptId
+- Create new `GoogleAppsScript` project and get the project's scriptId
 
 ## Usage
 
