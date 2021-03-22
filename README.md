@@ -3,13 +3,13 @@ clasp-ts-template
 
 ## Description
 
-This is `GoogleAppScripts(GAS)` template repository used `Clasp` & `TypeScript`.
+This is `GoogleAppsScripts(GAS)` template repository used `Clasp` & `TypeScript`.
 
 ## Requirement
 
 - Install node.js(14.16.0)
 
-- Create new `GoogleAppScripts` project and get the scriptId
+- Create new `GoogleAppsScripts` project and get the project's scriptId
 
 ## Usage
 
@@ -26,30 +26,27 @@ $ git clone $CREATED_NEW_REPOSITORY_URL
 $ npm install
 ```
 
-4. `Clasp`を使って`Google`アカウントにログインしていない場合、`Clasp`を使ってログインする
+4. Use clasp and log in to a google account if you haven't logged in with `Clasp` yet
 ```bash
 $ npx clasp login
 ```
 
-5. `.clasp.json.sample`を参考に`.clasp.json`を作成する
+5. Create `.clasp.json` by referring to `.clasp.json.sample`
 
 
-6. ソースコードを作成する
-
-
-7. ソースコードをビルドし、アップロードする
+6. Build and upload the files
 
 ```bash
 $ npm run publish
 ```
 
-8. GASのコンソールをブラウザで開く
+8. Open a `GAS` console using browser
 
 ```bash
 $ npx clasp open
 ```
 
-9. 必要に応じて、GASのコンソールで関数の実行やトリガーの設定を行う
+9. Execute the function or set up a trigger if necessary.
 
 
 ## Install
