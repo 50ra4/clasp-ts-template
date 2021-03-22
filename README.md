@@ -3,7 +3,7 @@ clasp-ts-template
 
 ## Description
 
-This is `GoogleAppsScript(GAS)` template repository used `Clasp` & `TypeScript`.
+This is `GoogleAppsScript(GAS)` template repository using `Clasp` and `TypeScript`.
 
 ## Requirement
 
