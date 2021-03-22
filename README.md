@@ -33,7 +33,7 @@ $ npm install
 $ npx clasp login
 ```
 
-5. Create `.clasp.json` by referring to [.clasp.json.sample](./blob/main/.clasp.sample.json).
+5. Create `.clasp.json` by referring to [.clasp.json.sample](./.clasp.sample.json).
 
 6. Build and upload the files.
 
@@ -49,9 +49,9 @@ $ npx clasp open
 
 9. Execute the function or set up a trigger if necessary.
 
-10. Pushing the branch to remote will run the [ci.yml](.github/workflows/ci.yml) test.
+10. Pushing the branch to remote will run the [ci.yml](./.github/workflows/ci.yml) test.
 
-11. The processing of [cd.yml](.github/workflows/cd.yml) will run if you merge the PR of the branch that matches `release/v*` into the `main` branch.
+11. The processing of [cd.yml](./.github/workflows/cd.yml) will run if you merge the PR of the branch that matches `release/v*` into the `main` branch.
 
 ## Install
 
@@ -59,7 +59,7 @@ $ npx clasp open
 
 ## Licence
 
-[MIT](./blob/main/LICENSE)
+[MIT](./LICENSE)
 
 ## Author
 
