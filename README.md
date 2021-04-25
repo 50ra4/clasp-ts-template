@@ -15,6 +15,8 @@ This is `GoogleAppsScript(GAS)` template repository using `Clasp` and `TypeScrip
 
 1. Use this template and Create new repository.
 
+![template](./.public/template.png)
+
 2. Execute `git clone`.
 
 ```bash
